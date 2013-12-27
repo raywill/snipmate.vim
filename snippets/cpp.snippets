@@ -13,22 +13,327 @@ snippet map
 # std::vector
 snippet vector
 	std::vector<${1:char}> v${2};
+snippet fori
+	for (int ${2:i} = 0; $2 < ${1:count}; $2${3:++}) {
+		${4:/* code */}
+	}
+
+# For OceanBase
+snippet tbe
+	TBSYS_LOG(ERROR, "${1:error_msg}"${2:);}
+snippet tbw
+	TBSYS_LOG(WARN, "${1:warn_msg}"${2:);}
+snippet tbi
+	TBSYS_LOG(INFO, "${1:info}"${2:);}
+snippet tbd
+	TBSYS_LOG(DEBUG, "${1:debug_msg}"${2:);}
+snippet loge
+	TBSYS_LOG(ERROR, "${1:error_msg}"${2:);}
+snippet logw
+	TBSYS_LOG(WARN, "${1:warn_msg}"${2:);}
+snippet logi
+	TBSYS_LOG(INFO, "${1:info}"${2:);}
+snippet logd
+	TBSYS_LOG(DEBUG, "${1:debug_msg}"${2:);}
+snippet tblog
+	TBSYS_LOG(${1:WARN}
+snippet ret
+	int ret = OB_SUCCESS;
+	${1}
+	return ret;
 # Namespace
 snippet ns
 	namespace ${1:`Filename('', 'my')`} {
 		${2}
 	} /* $1 */
-# Class
-snippet cl
-	class ${1:`Filename('$1_t', 'name')`} {
-	public:
-		$1 (${2:arguments});
-		virtual ~$1 ();
+snippet using
+	using namespace ${1:oceanbase}
 
-	private:
-		${3:/* data */}
-	};
-snippet fori
-	for (int ${2:i} = 0; $2 < ${1:count}; $2${3:++}) {
-		${4:/* code */}
+snippet get_row_desc
+	int ${1:XXXOperator}::get_next_row(const common::ObRowDesc &row_desc)
+	{
+		${2}
 	}
+snippet get_next_row
+	int ${1:XXXOperator}::get_next_row(const common::ObRow &*row)
+	{
+		${2}
+	}
+snippet open
+	int ${1:XXXOperator}::open()
+	{
+		${2}
+	}
+snippet close
+	int ${1:XXXOperator}::close()
+	{
+		${2}
+	}
+snippet serialize
+	int ${1:TypeName}::serialize(char* buf, const int64_t buf_len, int64_t& pos) const
+	{
+	}
+snippet deserialize
+	int ${1:TypeName}::deserialize(const char* buf, const int64_t data_len, int64_t& pos)
+	{
+	}
+snippet get_serialize_size
+	int64_t ${1:TypeName}::get_serialize_size(void) const
+	{
+		int64_t size = 0;
+		${2}
+		return size;
+	}
+
+snippet class_h
+	#ifndef ${4:__XXX_H__}
+	#define $4
+	namespace oceanbase
+	{
+		namespace ${1:ns}
+		{
+			class ${2:class_name}
+			{
+				public:
+					$2();
+					${3:virtual} ~$2();
+				private:
+					// disallow copy
+					$2(const $2 &other);
+					$2& operator=(const $2 &ohter);
+				private:
+
+			};
+		}
+	}
+	#endif /* $4 */
+snippet class_cpp
+	#include "`Filename()`.h"
+
+	using namespace oceanbase::common;
+	using namespace oceanbase::${1:ns};
+
+	${2::class_name}::$2()
+	{
+		${3:/* add your code here */}
+	}
+
+	$2::~$2()
+	{
+	}
+
+
+snippet class
+	#ifndef ${4:__XXX_H__}
+	#define $4
+	namespace oceanbase
+	{
+		namespace ${1:ns}
+		{
+			class ${2:class_name}
+			{
+				public:
+					$2();
+					${3:virtual} ~$2();
+				private:
+					// disallow copy
+					$2(const $2 &other);
+					$2& operator=(const $2 &ohter);
+				private:
+
+			};
+		}
+	}
+	#endif /* $4 */
+	//// end of header file
+
+	#include "`Filename()`.h"
+
+	using namespace oceanbase::common;
+	using namespace oceanbase::$1;
+
+	$2:$2()
+	{
+	}
+
+	$2:~$2()
+	{
+	}
+
+snippet class_operator
+	#include "ob_phy_operator_type.h"
+	#include "${3:base_class_filename.h}"
+
+	namespace oceanbase
+	{
+		namespace common
+		{
+			class ObRow;
+			class ObRowDesc;
+		}
+		namespace sql
+		{
+			class ${1:class_name} : public ${2:BaseOperator}
+			{
+				public:
+					$1();
+					virtual ~$1();
+					virtual void reset();
+					virtual void reuse();
+					virtual int open();
+					virtual int close();
+					virtual int get_next_row(const common::ObRow &*row);
+					virtual int get_row_desc(const common::ObRowDesc *&row_desc) const;
+					virtual ObPhyOperatorType get_type() const;
+					int64_t to_string(char* buf, const int64_t buf_len) const;
+					DECLARE_PHY_OPERATOR_ASSIGN;
+					NEED_SERIALIZE_AND_DESERIALIZE;
+				private:
+					// disallow copy
+					$1(const $1 &other);
+					$1& operator=(const $1 &ohter);
+				private:
+
+			};
+		}
+	}
+	//// end of header file
+	#include "ob_row.h"
+	#include "`Filename()`.h"
+
+	using namespace oceanbase::common;
+	using namespace oceanbase::sql;
+
+	$1::$1()
+	{
+	}
+
+	$1::~$1()
+	{
+	}
+
+	void $1::reset()
+	{
+	}
+
+	void $1::reuse()
+	{
+	}
+
+	int $1::open()
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		return ret;
+	}
+
+	int $1::close()
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		return ret;
+	}
+
+	int $1::get_next_row(const common::ObRow &*row)
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		UNUSED(row);
+		return ret;
+	}
+
+	int $1::get_row_desc(const common::ObRowDesc *&row_desc) const
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		UNUSED(row_desc);
+		return ret;
+	}
+
+	ObPhyOperatorType $1::get_type() const
+	{
+		return PHY_INVALID;
+	}
+
+	int64_t $1::to_string(char* buf, const int64_t buf_len) const
+	{
+		int64_t pos = 0;
+		UNUSED(buf);
+		UNUSED(buf_len);
+		return pos;
+	}
+
+	PHY_OPERATOR_ASSIGN($1)
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		UNUSED(other);
+		return ret;
+	}
+
+	DEFINE_SERIALIZE($1)
+	{
+		int ret = OB_SUCCESS;
+		UNUSED(buf);
+		UNUSED(buf_len);
+		UNUSED(pos);
+		return ret;
+	}
+
+	DEFINE_DESERIALIZE($1)
+	{
+		int ret = OB_SUCCESS;
+		UNUSED(buf);
+		UNUSED(data_len);
+		UNUSED(pos);
+		return ret;
+	}
+
+	DEFINE_GET_SERIALIZE_SIZE($1)
+	{
+		int64_t size = 0;
+		return size;
+	}
+
+snippet gtest
+	#include <gtest/gtest.h>
+	using namespace oceanbase::common;
+
+	class ${1:XXX}Test : public ::testing::Test
+	{
+	public:
+		$1Test();
+		virtual ~$1Test();
+		virtual void SetUp();
+		virtual void TearDown();
+	private:
+		// disallow copy
+		$1Test(const $1Test &other);
+		$1Test& operator=(const $1Test &other);
+	private:
+		// data members
+	};
+	$1Test::$1Test()
+	{
+	}
+
+	$1Test::~$1Test()
+	{
+	}
+
+	void $1Test::SetUp()
+	{
+	}
+
+	void $1Test::TearDown()
+	{
+	}
+
+	TEST_F($1Test, basic_test)
+	{
+		${2:/* put your testing code here */}
+	}
+
+	int main(int argc, char **argv)
+	{
+		ob_init_memory_pool();
+		TBSYS_LOGGER.setLogLevel("INFO");
+	  ::testing::InitGoogleTest(&argc,argv);
+		return RUN_ALL_TESTS();
+	}
+
