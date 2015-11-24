@@ -1,3 +1,6 @@
+## 更新：
+ 2015-11-24 增加了对javascript/HTML代码格式化的支持
+
 ## Quickly install with:
 
   * git clone git://github.com/raywill/snipmate.vim.git
@@ -56,5 +59,4 @@ for (i = 0; OB_SUCCESS == ret && i < count; i++)
  
 ## 更多功能请自行定制，参考~/.vim/snippets/cpp.snippets
 
-## 更新：
- 增加了对javascript/HTML代码格式化的支持
+
