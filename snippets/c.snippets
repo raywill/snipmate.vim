@@ -41,11 +41,6 @@ snippet once
 	${2}
 
 	#endif /* end of include guard: $1 */
-# If Condition
-snippet ifc
-	if (${1:/* condition */}) {
-		${2:/* code */}
-	}
 snippet el
 	else {
 		${1}
@@ -62,11 +57,6 @@ snippet do
 snippet wh
 	while (${1:/* condition */}) {
 		${2:/* code */}
-	}
-# For Loop
-snippet forc
-	for (${2:i} = 0; $2 < ${1:count}; $2${3:++}) {
-		${4:/* code */}
 	}
 # Custom For Loop
 snippet forr

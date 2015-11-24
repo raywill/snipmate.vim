@@ -17,14 +17,16 @@ TBSYS_LOG(DEBUG, "debug_msg");
 
 * if
 ```cpp
-if (OB_SUCCESS != (ret = function())) {
+if (OB_SUCCESS != (ret = function()))
+{
 }
 ```
 
 
 * for
 ```cpp
-for (i = 0; OB_SUCCESS == ret && i < count; i++) {
+for (i = 0; OB_SUCCESS == ret && i < count; i++)
+{
     /* code */
 }
 ```
@@ -40,9 +42,19 @@ for (i = 0; OB_SUCCESS == ret && i < count; i++) {
 
  仅生成h部分
 
+* class_operator
+ 
+ 自动生成一个物理运算符的接口框架
+
+* serialize, deserialize, get_serialize_size
+
+ 自动生成类的序列化相关函数
+
 * gtest
 
  自动生成一个GTest测试框架
  
 ## 更多功能请自行定制，参考~/.vim/snippets/cpp.snippets
 
+## 更新：
+ 增加了对javascript/HTML代码格式化的支持

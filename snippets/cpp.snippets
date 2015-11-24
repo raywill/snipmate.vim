@@ -22,11 +22,13 @@ snippet ret
 	${1}
 	return ret;
 snippet if
-	if (OB_SUCCESS != (ret = ${1:function}($2))) {
+	if (OB_SUCCESS != (ret = ${1:function}($2)))
+	{
 	  $2
 	}
 snippet ifw
-	if (OB_SUCCESS != (ret = ${1:function}(${2:}))) {
+	if (OB_SUCCESS != (ret = ${1:function}(${2:})))
+	{
 	  TBSYS_LOG(WARN, "${3:WARN_MSG} ret=%ret", ret);
 	}
 
@@ -37,8 +39,7 @@ snippet for
 
 # Namespace
 snippet ns
-	namespace ${1:`Filename('', 'my')`}
-	{
+	namespace ${1:`Filename('', 'my')`} {
 		${2}
 	} /* $1 */
 snippet using
@@ -85,41 +86,37 @@ snippet class_h
 	#define $4
 	namespace oceanbase
 	{
-	namespace ${1:ns}
-	{
-	class ${2:class_name}
-	{
-	public:
-		$2();
-		${3:virtual} ~$2();
-	private:
-		/* functions */
-		/* variables */
-		DISALLOW_COPY_AND_ASSIGN($2);
-	};
-	}
+		namespace ${1:ns}
+		{
+			class ${2:class_name}
+			{
+				public:
+					$2();
+					${3:virtual} ~$2();
+				private:
+					// disallow copy
+					$2(const $2 &other);
+					$2& operator=(const $2 &ohter);
+				private:
+
+			};
+		}
 	}
 	#endif /* $4 */
 snippet class_cpp
-
 	#include "`Filename()`.h"
-	using namespace oceanbase::common;
-	namespace oceanbase
-	{
-	namespace $1
-	{
 
-	$2::$2()
+	using namespace oceanbase::common;
+	using namespace oceanbase::${1:ns};
+
+	${2::class_name}::$2()
 	{
+		${3:/* add your code here */}
 	}
 
 	$2::~$2()
 	{
 	}
-
-	}/* ns $1*/
-	}/* ns oceanbase */
-
 
 
 snippet class
@@ -127,19 +124,21 @@ snippet class
 	#define $4
 	namespace oceanbase
 	{
-	namespace ${1:ns}
-	{
-	class ${2:class_name}
-	{
-	public:
-		$2();
-		${3:virtual} ~$2();
-	private:
-		/* functions */
-		/* variables */
-		DISALLOW_COPY_AND_ASSIGN($2);
-	};
-	}
+		namespace ${1:ns}
+		{
+			class ${2:class_name}
+			{
+				public:
+					$2();
+					${3:virtual} ~$2();
+				private:
+					// disallow copy
+					$2(const $2 &other);
+					$2& operator=(const $2 &ohter);
+				private:
+
+			};
+		}
 	}
 	#endif /* $4 */
 	//// end of header file
@@ -147,21 +146,145 @@ snippet class
 	#include "`Filename()`.h"
 
 	using namespace oceanbase::common;
+	using namespace oceanbase::$1;
+
+	$2:$2()
+	{
+	}
+
+	$2:~$2()
+	{
+	}
+
+snippet class_operator
+	#include "ob_phy_operator_type.h"
+	#include "${3:base_class_filename.h}"
+
 	namespace oceanbase
 	{
-	namespace $1
-	{
+		namespace common
+		{
+			class ObRow;
+			class ObRowDesc;
+		}
+		namespace sql
+		{
+			class ${1:class_name} : public ${2:BaseOperator}
+			{
+				public:
+					$1();
+					virtual ~$1();
+					virtual void reset();
+					virtual void reuse();
+					virtual int open();
+					virtual int close();
+					virtual int get_next_row(const common::ObRow &*row);
+					virtual int get_row_desc(const common::ObRowDesc *&row_desc) const;
+					virtual ObPhyOperatorType get_type() const;
+					int64_t to_string(char* buf, const int64_t buf_len) const;
+					DECLARE_PHY_OPERATOR_ASSIGN;
+					NEED_SERIALIZE_AND_DESERIALIZE;
+				private:
+					// disallow copy
+					$1(const $1 &other);
+					$1& operator=(const $1 &ohter);
+				private:
 
-	$2::$2()
+			};
+		}
+	}
+	//// end of header file
+	#include "ob_row.h"
+	#include "`Filename()`.h"
+
+	using namespace oceanbase::common;
+	using namespace oceanbase::sql;
+
+	$1::$1()
 	{
 	}
 
-	$2::~$2()
+	$1::~$1()
 	{
 	}
 
-	}/* ns $1*/
-	}/* ns oceanbase */
+	void $1::reset()
+	{
+	}
+
+	void $1::reuse()
+	{
+	}
+
+	int $1::open()
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		return ret;
+	}
+
+	int $1::close()
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		return ret;
+	}
+
+	int $1::get_next_row(const common::ObRow &*row)
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		UNUSED(row);
+		return ret;
+	}
+
+	int $1::get_row_desc(const common::ObRowDesc *&row_desc) const
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		UNUSED(row_desc);
+		return ret;
+	}
+
+	ObPhyOperatorType $1::get_type() const
+	{
+		return PHY_INVALID;
+	}
+
+	int64_t $1::to_string(char* buf, const int64_t buf_len) const
+	{
+		int64_t pos = 0;
+		UNUSED(buf);
+		UNUSED(buf_len);
+		return pos;
+	}
+
+	PHY_OPERATOR_ASSIGN($1)
+	{
+		int ret = OB_NOT_IMPLEMENT;
+		UNUSED(other);
+		return ret;
+	}
+
+	DEFINE_SERIALIZE($1)
+	{
+		int ret = OB_SUCCESS;
+		UNUSED(buf);
+		UNUSED(buf_len);
+		UNUSED(pos);
+		return ret;
+	}
+
+	DEFINE_DESERIALIZE($1)
+	{
+		int ret = OB_SUCCESS;
+		UNUSED(buf);
+		UNUSED(data_len);
+		UNUSED(pos);
+		return ret;
+	}
+
+	DEFINE_GET_SERIALIZE_SIZE($1)
+	{
+		int64_t size = 0;
+		return size;
+	}
 
 snippet gtest
 	#include <gtest/gtest.h>
