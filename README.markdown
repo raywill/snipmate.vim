@@ -1,5 +1,6 @@
 ## 更新：
  2015-11-24 增加了对javascript/HTML代码格式化的支持
+ 2015-11-24 增加today, time, now 三个snippets
 
 ## Quickly install with:
 
